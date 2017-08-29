@@ -1,0 +1,22 @@
+---
+- name: Test template output
+  hosts: localhost
+  vars:
+    test_files:
+      - unchanged_file
+      - changed_file
+      - new_file
+
+  tasks:
+    - name: Install files
+      template:
+        src: "{{ test_file }}"
+        dest: "/tmp/{{ test_file }}"
+      with_items: "{{ test_files }}"
+      loop_control:
+        loop_var: test_file
+      register: install_files_task
+
+    - name: registered var contents
+      debug:
+        var: install_files_task
